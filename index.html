@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Task Scheduling & Data Structure Visualization Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="cosmic-bg">
+        <div class="stars"></div>
+        <div class="grid-overlay"></div>
+        <div class="glow-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-left">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <span class="icon-layer"></span>
+                        <span class="icon-layer"></span>
+                        <span class="icon-layer"></span>
+                    </div>
+                    <div class="logo-text">
+                        <h1>CLOUD SCHEDULER</h1>
+                        <span class="subtitle">Data Structure Visualization</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-center">
+                <div class="system-status">
+                    <div class="status-indicator" id="statusIndicator">
+                        <span class="pulse"></span>
+                        <span id="statusText">READY</span>
+                    </div>
+                    <div class="live-clock" id="liveClock">00:00:00</div>
+                </div>
+                
+                <div class="system-monitors">
+                    <div class="monitor-item">
+                        <span class="monitor-label">CPU</span>
+                        <div class="monitor-bar">
+                            <div class="monitor-fill" id="cpuMonitor" style="width: 0%"></div>
+                        </div>
+                        <span class="monitor-value" id="cpuValue">0%</span>
+                    </div>
+                    <div class="monitor-item">
+                        <span class="monitor-label">RAM</span>
+                        <div class="monitor-bar">
+                            <div class="monitor-fill" id="ramMonitor" style="width: 0%"></div>
+                        </div>
+                        <span class="monitor-value" id="ramValue">0%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="speed-control">
+                    <label>Speed</label>
+                    <input type="range" id="speedSlider" min="0.25" max="5" step="0.25" value="1">
+                    <span id="speedValue">1x</span>
+                </div>
+                <button class="btn-demo" id="autoDemoBtn">
+                    <span class="btn-icon">▶</span>
+                    Auto Demo
+                </button>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tab-navigation">
+            <button class="tab-btn active" data-tab="simulation">
+                <span class="tab-icon">⚡</span>
+                Simulation
+            </button>
+            <button class="tab-btn" data-tab="dsa-lab">
+                <span class="tab-icon">🧬</span>
+                DSA Lab
+            </button>
+            <button class="tab-btn" data-tab="integration">
+                <span class="tab-icon">🔗</span>
+                Integration
+            </button>
+            <button class="tab-btn" data-tab="education">
+                <span class="tab-icon">📚</span>
+                Education
+            </button>
+        </nav>
+
+        <!-- Tab Content -->
+        <div class="tab-content active" id="simulation">
+            <div class="simulation-layout">
+                <!-- Left Panel -->
+                <aside class="left-panel glass-panel">
+                    <div class="panel-header">
+                        <h3>Task Control Center</h3>
+                        <div class="mode-toggle">
+                            <button class="toggle-btn active" id="inputModeBtn">Input</button>
+                            <button class="toggle-btn" id="runModeBtn">Run</button>
+                        </div>
+                    </div>
+                    
+                    <div class="panel-content">
+                        <!-- Task Pool -->
+                        <section class="task-pool">
+                            <h4>Task Pool</h4>
+                            <div class="task-pool-grid" id="taskPool">
+                                <!-- Task cards will be added here -->
+                            </div>
+                        </section>
+
+                        <!-- Manual Task Form -->
+                        <section class="task-form">
+                            <h4>Manual Task Creation</h4>
+                            <form id="manualTaskForm">
+                                <div class="form-group">
+                                    <label>Task Name</label>
+                                    <input type="text" id="taskName" placeholder="Enter task name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Priority</label>
+                                    <select id="taskPriority">
+                                        <option value="1">Low</option>
+                                        <option value="2">Medium</option>
+                                        <option value="3">High</option>
+                                        <option value="4">Critical</option>
+                                    </select>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>CPU (%)</label>
+                                        <input type="number" id="taskCpu" min="1" max="100" value="50">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>RAM (MB)</label>
+                                        <input type="number" id="taskRam" min="100" max="4096" value="512">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Arrival (s)</label>
+                                        <input type="number" id="taskArrival" min="0" value="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Deadline (s)</label>
+                                        <input type="number" id="taskDeadline" min="1" value="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select id="taskCategory">
+                                        <option value="compute">Compute</option>
+                                        <option value="memory">Memory</option>
+                                        <option value="network">Network</option>
+                                        <option value="mixed">Mixed</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn-primary">Create Task</button>
+                            </form>
+                        </section>
+
+                        <!-- Bulk Generator -->
+                        <section class="bulk-generator">
+                            <h4>Bulk Task Generator</h4>
+                            <div class="form-group">
+                                <label>Number of Tasks</label>
+                                <input type="number" id="bulkCount" min="1" max="50" value="10">
+                            </div>
+                            <div class="form-group">
+                                <label>Load Pattern</label>
+                                <select id="bulkPattern">
+                                    <option value="normal">Normal</option>
+                                    <option value="burst">Burst</option>
+                                    <option value="heavy">Heavy</option>
+                                </select>
+                            </div>
+                            <button class="btn-secondary" id="generateBulkBtn">Generate Tasks</button>
+                        </section>
+
+                        <!-- Queues Visualization -->
+                        <section class="queues-section">
+                            <div class="queue-container">
+                                <h4>Priority Queue (Heap)</h4>
+                                <div class="queue-visual priority-queue" id="priorityQueue">
+                                    <div class="queue-empty">Empty</div>
+                                </div>
+                            </div>
+                            <div class="queue-container">
+                                <h4>Waiting Queue (FIFO)</h4>
+                                <div class="queue-visual waiting-queue" id="waitingQueue">
+                                    <div class="queue-empty">Empty</div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </aside>
+
+                <!-- Center Panel - Server Cluster -->
+                <main class="center-panel">
+                    <div class="panel-header">
+                        <h3>Server Cluster</h3>
+                        <div class="cluster-controls">
+                            <button class="btn-control" id="startSimBtn">
+                                <span>▶</span> Start
+                            </button>
+                            <button class="btn-control" id="pauseSimBtn" disabled>
+                                <span>⏸</span> Pause
+                            </button>
+                            <button class="btn-control" id="resetSimBtn">
+                                <span>⟲</span> Reset
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="server-grid" id="serverGrid">
+                        <!-- Servers will be generated here -->
+                    </div>
+
+                    <div class="algorithm-selector">
+                        <label>Scheduling Algorithm:</label>
+                        <select id="algorithmSelect">
+                            <option value="priority">Priority Scheduling</option>
+                            <option value="greedy">Greedy Load Balancing</option>
+                            <option value="deadline">Deadline Scheduling</option>
+                            <option value="aging">Aging Algorithm</option>
+                        </select>
+                    </div>
+                </main>
+
+                <!-- Right Panel - Execution Monitor -->
+                <aside class="right-panel glass-panel">
+                    <div class="panel-header">
+                        <h3>Execution Monitor</h3>
+                    </div>
+                    
+                    <div class="panel-content">
+                        <section class="timeline-section">
+                            <h4>Completed Tasks</h4>
+                            <div class="timeline" id="completedTimeline">
+                                <!-- Timeline items will be added here -->
+                            </div>
+                        </section>
+
+                        <section class="logs-section">
+                            <h4>System Logs</h4>
+                            <div class="logs-container" id="systemLogs">
+                                <div class="log-entry info">
+                                    <span class="log-time">00:00:00</span>
+                                    <span class="log-message">System initialized</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="alerts-section">
+                            <h4>Alerts</h4>
+                            <div class="alerts-container" id="alertsContainer">
+                                <!-- Alerts will be added here -->
+                            </div>
+                        </section>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Bottom Analytics Panel -->
+            <div class="analytics-panel glass-panel">
+                <div class="analytics-header">
+                    <h3>Performance Analytics</h3>
+                    <div class="kpi-counters">
+                        <div class="kpi-item">
+                            <span class="kpi-label">Total Tasks</span>
+                            <span class="kpi-value" id="kpiTotal">0</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span class="kpi-label">Completed</span>
+                            <span class="kpi-value" id="kpiCompleted">0</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span class="kpi-label">Avg Wait Time</span>
+                            <span class="kpi-value" id="kpiWait">0s</span>
+                        </div>
+                        <div class="kpi-item">
+                            <span class="kpi-label">Throughput</span>
+                            <span class="kpi-value" id="kpiThroughput">0/s</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <canvas id="waitTimeChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="throughputChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="loadDistChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="responseTimeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DSA Lab Tab -->
+        <div class="tab-content" id="dsa-lab">
+            <div class="dsa-layout">
+                <div class="dsa-sidebar glass-panel">
+                    <h3>Data Structures</h3>
+                    <nav class="dsa-nav">
+                        <button class="dsa-nav-btn active" data-ds="heap">Priority Queue (Heap)</button>
+                        <button class="dsa-nav-btn" data-ds="queue">Queue (FIFO)</button>
+                        <button class="dsa-nav-btn" data-ds="bst">Binary Search Tree</button>
+                        <button class="dsa-nav-btn" data-ds="hashmap">Hash Map</button>
+                        <button class="dsa-nav-btn" data-ds="linkedlist">Linked List</button>
+                    </nav>
+                </div>
+
+                <div class="dsa-main">
+                    <!-- Heap Visualization -->
+                    <div class="dsa-container active" id="ds-heap">
+                        <div class="dsa-header">
+                            <h2>Priority Queue (Min Heap)</h2>
+                            <div class="complexity-badge">
+                                <span>Time: O(log n)</span>
+                                <span>Space: O(n)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dsa-controls glass-panel">
+                            <div class="control-group">
+                                <input type="text" id="heapName" placeholder="Task Name">
+                                <input type="number" id="heapPriority" placeholder="Priority" min="1" max="100">
+                                <button class="btn-action" id="heapInsert">Insert</button>
+                            </div>
+                            <div class="control-group">
+                                <button class="btn-action" id="heapExtractMin">Extract Min</button>
+                                <button class="btn-action" id="heapPeek">Peek</button>
+                                <button class="btn-action" id="heapClear">Clear</button>
+                            </div>
+                        </div>
+
+                        <div class="dsa-visualization">
+                            <div class="heap-tree" id="heapTree">
+                                <!-- Heap tree visualization -->
+                            </div>
+                            <div class="heap-array" id="heapArray">
+                                <!-- Array representation -->
+                            </div>
+                        </div>
+
+                        <div class="dsa-explanation glass-panel">
+                            <h4>Explanation</h4>
+                            <p>A min-heap maintains the property that each parent node has a value less than or equal to its children. This ensures O(log n) insertion and extraction, making it ideal for priority-based task scheduling.</p>
+                            <div class="operation-steps" id="heapSteps">
+                                <p>Perform an operation to see step-by-step explanation.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Queue Visualization -->
+                    <div class="dsa-container" id="ds-queue">
+                        <div class="dsa-header">
+                            <h2>Queue (FIFO)</h2>
+                            <div class="complexity-badge">
+                                <span>Time: O(1)</span>
+                                <span>Space: O(n)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dsa-controls glass-panel">
+                            <div class="control-group">
+                                <input type="text" id="queueValue" placeholder="Task Name">
+                                <button class="btn-action" id="queueEnqueue">Enqueue</button>
+                                <button class="btn-action" id="queueDequeue">Dequeue</button>
+                                <button class="btn-action" id="queueFront">Front</button>
+                                <button class="btn-action" id="queueClear">Clear</button>
+                            </div>
+                        </div>
+
+                        <div class="dsa-visualization">
+                            <div class="queue-lane" id="queueLane">
+                                <div class="queue-pointer head-pointer">HEAD</div>
+                                <div class="queue-items" id="queueItems"></div>
+                                <div class="queue-pointer tail-pointer">TAIL</div>
+                            </div>
+                        </div>
+
+                        <div class="dsa-explanation glass-panel">
+                            <h4>Explanation</h4>
+                            <p>Queue follows First-In-First-Out (FIFO) principle. Tasks are added at the rear and removed from the front, ensuring fair scheduling where tasks are processed in the order they arrive.</p>
+                            <div class="operation-steps" id="queueSteps"></div>
+                        </div>
+                    </div>
+
+                    <!-- BST Visualization -->
+                    <div class="dsa-container" id="ds-bst">
+                        <div class="dsa-header">
+                            <h2>Binary Search Tree</h2>
+                            <div class="complexity-badge">
+                                <span>Time: O(log n) avg</span>
+                                <span>Space: O(n)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dsa-controls glass-panel">
+                            <div class="control-group">
+                                <input type="number" id="bstValue" placeholder="Deadline (seconds)">
+                                <button class="btn-action" id="bstInsert">Insert</button>
+                                <button class="btn-action" id="bstDelete">Delete</button>
+                                <button class="btn-action" id="bstSearch">Search</button>
+                            </div>
+                            <div class="control-group">
+                                <button class="btn-action" id="bstInorder">Inorder</button>
+                                <button class="btn-action" id="bstPreorder">Preorder</button>
+                                <button class="btn-action" id="bstPostorder">Postorder</button>
+                                <button class="btn-action" id="bstClear">Clear</button>
+                            </div>
+                        </div>
+
+                        <div class="dsa-visualization">
+                            <div class="bst-tree" id="bstTree"></div>
+                        </div>
+
+                        <div class="dsa-explanation glass-panel">
+                            <h4>Explanation</h4>
+                            <p>Binary Search Tree organizes tasks by deadline. Left subtree contains tasks with earlier deadlines, right subtree contains tasks with later deadlines. Enables efficient deadline-based scheduling.</p>
+                            <div class="operation-steps" id="bstSteps"></div>
+                        </div>
+                    </div>
+
+                    <!-- HashMap Visualization -->
+                    <div class="dsa-container" id="ds-hashmap">
+                        <div class="dsa-header">
+                            <h2>Hash Map</h2>
+                            <div class="complexity-badge">
+                                <span>Time: O(1) avg</span>
+                                <span>Space: O(n)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dsa-controls glass-panel">
+                            <div class="control-group">
+                                <input type="text" id="hashmapKey" placeholder="Task ID">
+                                <input type="text" id="hashmapValue" placeholder="Server ID">
+                                <button class="btn-action" id="hashmapPut">Put</button>
+                                <button class="btn-action" id="hashmapGet">Get</button>
+                                <button class="btn-action" id="hashmapRemove">Remove</button>
+                                <button class="btn-action" id="hashmapClear">Clear</button>
+                            </div>
+                        </div>
+
+                        <div class="dsa-visualization">
+                            <div class="hashmap-buckets" id="hashmapBuckets"></div>
+                        </div>
+
+                        <div class="dsa-explanation glass-panel">
+                            <h4>Explanation</h4>
+                            <p>Hash Map provides O(1) average-time task-to-server mapping. Uses hash function to map task IDs to bucket indices, with chaining to handle collisions.</p>
+                            <div class="operation-steps" id="hashmapSteps"></div>
+                        </div>
+                    </div>
+
+                    <!-- LinkedList Visualization -->
+                    <div class="dsa-container" id="ds-linkedlist">
+                        <div class="dsa-header">
+                            <h2>Linked List</h2>
+                            <div class="complexity-badge">
+                                <span>Time: O(n)</span>
+                                <span>Space: O(n)</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dsa-controls glass-panel">
+                            <div class="control-group">
+                                <input type="text" id="linkedlistValue" placeholder="Task Name">
+                                <button class="btn-action" id="linkedlistAppend">Append</button>
+                                <button class="btn-action" id="linkedlistDelete">Delete</button>
+                                <button class="btn-action" id="linkedlistReverse">Reverse</button>
+                                <button class="btn-action" id="linkedlistClear">Clear</button>
+                            </div>
+                        </div>
+
+                        <div class="dsa-visualization">
+                            <div class="linkedlist-chain" id="linkedlistChain"></div>
+                        </div>
+
+                        <div class="dsa-explanation glass-panel">
+                            <h4>Explanation</h4>
+                            <p>Linked List stores execution history sequentially. Each node contains task data and a pointer to the next node, enabling efficient insertion and deletion.</p>
+                            <div class="operation-steps" id="linkedlistSteps"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Integration Tab -->
+        <div class="tab-content" id="integration">
+            <div class="integration-layout">
+                <div class="integration-header glass-panel">
+                    <h2>Live Integration Monitor</h2>
+                    <p>Watch how simulation operations synchronize with data structures in real-time</p>
+                </div>
+
+                <div class="integration-grid">
+                    <div class="integration-card glass-panel">
+                        <h3>Task Added → Heap</h3>
+                        <div class="sync-indicator" id="syncHeap">
+                            <div class="sync-pulse"></div>
+                            <span>Synchronized</span>
+                        </div>
+                        <div class="last-sync" id="lastSyncHeap">No activity</div>
+                    </div>
+
+                    <div class="integration-card glass-panel">
+                        <h3>Task Queued → Queue</h3>
+                        <div class="sync-indicator" id="syncQueue">
+                            <div class="sync-pulse"></div>
+                            <span>Synchronized</span>
+                        </div>
+                        <div class="last-sync" id="lastSyncQueue">No activity</div>
+                    </div>
+
+                    <div class="integration-card glass-panel">
+                        <h3>Task Assigned → HashMap</h3>
+                        <div class="sync-indicator" id="syncHashmap">
+                            <div class="sync-pulse"></div>
+                            <span>Synchronized</span>
+                        </div>
+                        <div class="last-sync" id="lastSyncHashmap">No activity</div>
+                    </div>
+
+                    <div class="integration-card glass-panel">
+                        <h3>Task Completed → LinkedList</h3>
+                        <div class="sync-indicator" id="syncLinkedlist">
+                            <div class="sync-pulse"></div>
+                            <span>Synchronized</span>
+                        </div>
+                        <div class="last-sync" id="lastSyncLinkedlist">No activity</div>
+                    </div>
+
+                    <div class="integration-card glass-panel">
+                        <h3>Deadline Check → BST</h3>
+                        <div class="sync-indicator" id="syncBst">
+                            <div class="sync-pulse"></div>
+                            <span>Synchronized</span>
+                        </div>
+                        <div class="last-sync" id="lastSyncBst">No activity</div>
+                    </div>
+                </div>
+
+                <div class="integration-log glass-panel">
+                    <h3>Integration Events</h3>
+                    <div class="integration-events" id="integrationEvents">
+                        <div class="event-entry">System ready for integration monitoring</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education Tab -->
+        <div class="tab-content" id="education">
+            <div class="education-layout">
+                <div class="education-sidebar glass-panel">
+                    <h3>Learning Modules</h3>
+                    <nav class="education-nav">
+                        <button class="edu-nav-btn active" data-module="basics">Scheduling Basics</button>
+                        <button class="edu-nav-btn" data-module="algorithms">Algorithms</button>
+                        <button class="edu-nav-btn" data-module="datastructures">Data Structures</button>
+                        <button class="edu-nav-btn" data-module="optimization">Optimization</button>
+                        <button class="edu-nav-btn" data-module="walkthrough">Guided Walkthrough</button>
+                    </nav>
+                </div>
+
+                <div class="education-content">
+                    <div class="education-module active" id="module-basics">
+                        <h2>Scheduling Basics</h2>
+                        <div class="lesson-content glass-panel">
+                            <h3>What is Task Scheduling?</h3>
+                            <p>Task scheduling is the process of assigning computational tasks to available server resources. The goal is to optimize metrics like throughput, response time, and resource utilization.</p>
+                            
+                            <h3>Key Concepts</h3>
+                            <ul>
+                                <li><strong>Priority:</strong> Tasks with higher priority are executed first</li>
+                                <li><strong>Deadline:</strong> Time limit by which a task must complete</li>
+                                <li><strong>Arrival Time:</strong> When a task enters the system</li>
+                                <li><strong>Wait Time:</strong> Time spent waiting in queue</li>
+                                <li><strong>Turnaround Time:</strong> Total time from arrival to completion</li>
+                            </ul>
+
+                            <div class="interactive-demo">
+                                <button class="btn-demo-step" id="demoBasics">Start Interactive Demo</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="education-module" id="module-algorithms">
+                        <h2>Scheduling Algorithms</h2>
+                        <div class="lesson-content glass-panel">
+                            <h3>Priority Scheduling</h3>
+                            <p>Tasks are executed based on priority level. Higher priority tasks preempt lower priority ones.</p>
+                            <div class="algorithm-visualization" id="algoVizPriority"></div>
+
+                            <h3>Greedy Load Balancing</h3>
+                            <p>Assigns each task to the server with the lowest current load, distributing work evenly.</p>
+                            <div class="algorithm-visualization" id="algoVizGreedy"></div>
+
+                            <h3>Deadline Scheduling</h3>
+                            <p>Prioritizes tasks based on deadline proximity to minimize missed deadlines.</p>
+                            <div class="algorithm-visualization" id="algoVizDeadline"></div>
+
+                            <h3>Aging Algorithm</h3>
+                            <p>Gradually increases priority of waiting tasks to prevent starvation.</p>
+                            <div class="algorithm-visualization" id="algoVizAging"></div>
+                        </div>
+                    </div>
+
+                    <div class="education-module" id="module-datastructures">
+                        <h2>Data Structures in Scheduling</h2>
+                        <div class="lesson-content glass-panel">
+                            <p>Efficient scheduling relies on carefully chosen data structures...</p>
+                            <button class="btn-demo-step" id="demoDataStructures">Explore Interactive Examples</button>
+                        </div>
+                    </div>
+
+                    <div class="education-module" id="module-optimization">
+                        <h2>Optimization Techniques</h2>
+                        <div class="lesson-content glass-panel">
+                            <p>Advanced techniques for improving scheduler performance...</p>
+                        </div>
+                    </div>
+
+                    <div class="education-module" id="module-walkthrough">
+                        <h2>Guided Walkthrough</h2>
+                        <div class="walkthrough-steps glass-panel">
+                            <div class="walkthrough-step active">
+                                <h3>Step 1: Create Tasks</h3>
+                                <p>Let's start by creating some tasks. Use the manual form or bulk generator.</p>
+                                <button class="btn-next-step">Next Step</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="components/DataStructures.js"></script>
+    <script src="components/Scheduler.js"></script>
+    <script src="components/Visualizer.js"></script>
+    <script src="utils/helpers.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
